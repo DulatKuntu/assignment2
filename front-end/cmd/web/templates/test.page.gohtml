@@ -1,0 +1,396 @@
+{{template "base" .}}
+
+{{define "content" }}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 class="mt-5">Test microservices</h1>
+                <hr>
+                <a id="country" class="btn btn-outline-secondary" href="javascript:void(0);">Countries</a>
+                <a id="user" class="btn btn-outline-secondary" href="javascript:void(0);">Users</a>
+                <a id="disease" class="btn btn-outline-secondary" href="javascript:void(0);">Disease</a>
+                <a id="diseaseType" class="btn btn-outline-secondary" href="javascript:void(0);">DiseaseType</a>
+                <a id="discover" class="btn btn-outline-secondary" href="javascript:void(0);">Discover</a>
+                <a id="doctors" class="btn btn-outline-secondary" href="javascript:void(0);">Doctors</a>
+                <a id="publicServants" class="btn btn-outline-secondary" href="javascript:void(0);">Public Servants</a>
+                <a id="specialize" class="btn btn-outline-secondary" href="javascript:void(0);">Specialize</a>
+                <a id="record" class="btn btn-outline-secondary" href="javascript:void(0);">Record</a>
+                <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
+                </div>
+                <div id="error" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
+                </div>
+                <div id="countryCreate" style="visibility: hidden; position:absolute">
+                        <input type="text" id="cnameCountry" placeholder="Country name">
+                        <input type="int" id="populationCountry" placeholder="Population">
+                        <input type="submit" value="Add" id="createCountry">
+                </div>
+                <div id="countryUpdate" style="visibility: hidden; position:absolute">
+                        <input type="text" id="cnameCountryUpdate" placeholder="Country name">
+                        <input type="int" id="populationCountryUpdate" placeholder="Population">
+                        <input type="submit" value="Update" id="updateCountry">
+                </div>
+                 <div id="userCreate" style="visibility: hidden; position:absolute">
+                        <input type="text" id="emailUser" placeholder="Email">
+                        <input type="int" id="nameUser" placeholder="Name">
+                        <input type="int" id="surnameUser" placeholder="Surname">
+                        <input type="int" id="salary" placeholder="Salary">
+                        <input type="int" id="phone" placeholder="Phone">
+                        <input type="int" id="cname" placeholder="Cname">
+                        <input type="submit" value="Add" id="createUser">
+                </div>
+                <div id="userUpdate" style="visibility: hidden; position:absolute">
+                        <input type="text" id="emailUserUpdate" placeholder="Email">
+                        <input type="int" id="nameUserUpdate" placeholder="Name">
+                        <input type="int" id="surnameUserUpdate" placeholder="Surname">
+                        <input type="int" id="salaryUpdate" placeholder="Salary">
+                        <input type="int" id="phoneUpdate" placeholder="Phone">
+                        <input type="int" id="cnameUpdate" placeholder="Cname">
+                        <input type="submit" value="Update" id="updateUser">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="results"></div>
+{{end}}
+
+{{define "js"}}
+    <script>
+    let output = document.getElementById("output");
+    let mailBtn = document.getElementById("mailBtn");
+    let getCountry = document.getElementById("country");
+    let countryCreate = document.getElementById("countryCreate");
+    let createCountry = document.getElementById("createCountry");
+    let countryUpdate = document.getElementById("countryUpdate");
+    let updateCountry = document.getElementById("updateCountry");
+    let cnameCountryUpdate = document.getElementById("cnameCountryUpdate");
+    let populationCountryUpdate = document.getElementById("populationCountryUpdate");
+    let getUser = document.getElementById("user");
+    let userCreate = document.getElementById("userCreate");
+    let createUser = document.getElementById("createUser");
+    let userUpdate = document.getElementById("userUpdate");
+    let updateUser = document.getElementById("updateUser");
+    let getDisease = document.getElementById("disease");
+    let getDiseaseType = document.getElementById("diseaseType");
+    let getDiscover = document.getElementById("discover");
+    let getDoctors = document.getElementById("doctors");
+    let getPublicServants = document.getElementById("publicServants");
+    let getSpecialize = document.getElementById("specialize");
+    let getRecord = document.getElementById("record");
+    getRecord.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/record\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>Email</th><th>Cname</th><th>Disease Code</th><th>Total deaths</th><th>Total Patients</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.email}</td><td>${obj.cname}</td><td>${obj.disease_code}</td><td>${obj.total_deaths}</td><td>${obj.total_patients}</td><td><button class=delete onclick=DeleteUser(\"${obj.email}\")>delete</button></td><td><button class=update onclick=UpdateUser(\"${obj.email}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showUserCreate()>Add Record</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+    getSpecialize.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/specialize\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>ID</th><th>Email</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.id}</td><td>${obj.email}</td><td><button class=delete onclick=DeleteUser(\"${obj.email}\")>delete</button></td><td><button class=update onclick=UpdateUser(\"${obj.email}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showUserCreate()>Add Specialize</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+    getPublicServants.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/publicServant\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>Email</th><th>Department</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.email}</td><td>${obj.department}</td><td><button class=delete onclick=DeleteUser(\"${obj.email}\")>delete</button></td><td><button class=update onclick=UpdateUser(\"${obj.email}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showUserCreate()>Add Public Servant</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+    getDoctors.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/doctor\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>Email</th><th>Degree</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.email}</td><td>${obj.degree}</td><td><button class=delete onclick=DeleteUser(\"${obj.email}\")>delete</button></td><td><button class=update onclick=UpdateUser(\"${obj.email}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showUserCreate()>Add Doctor</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+    getDiscover.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/discover\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>Cname</th><th>DiseaseCode</th><th>First Encountered date</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.cname}</td><td>${obj.disease_code}</td><td>${obj.first_enc_date}</td><td><button class=delete onclick=DeleteUser(\"${obj.email}\")>delete</button></td><td><button class=update onclick=UpdateUser(\"${obj.email}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showUserCreate()>Add Discover</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+    getDiseaseType.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/diseaseType\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>ID</th><th>Description</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.id}</td><td>${obj.description}</td><td><button class=delete onclick=DeleteUser(\"${obj.email}\")>delete</button></td><td><button class=update onclick=UpdateUser(\"${obj.email}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showUserCreate()>Add Disease Type</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+    getDisease.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/disease\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>DiseaseCode</th><th>Pathogen</th><th>Description</th><th>ID</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.disease_code}</td><td>${obj.pathogen}</td><td>${obj.description}</td><td>${obj.id}</td><td><button class=delete onclick=DeleteUser(\"${obj.email}\")>delete</button></td><td><button class=update onclick=UpdateUser(\"${obj.email}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showUserCreate()>Add Disease</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+
+    createUser.addEventListener("click", function() {
+
+        const payload = {
+                email: document.getElementById("emailUser").value,
+                name: document.getElementById("nameUser").value,
+                surname: document.getElementById("surnameUser").value,
+                salary: parseInt(document.getElementById("salary").value,10),
+                phone: document.getElementById("phone").value,
+                cname: document.getElementById("cname").value
+        }
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        const body = {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: headers,
+        }
+
+        fetch("http:\/\/localhost:4000/users/create", body)
+    })
+
+    updateUser.addEventListener("click", function(){
+            
+            const payload = {
+                email: document.getElementById("emailUserUpdate").value,
+                name: document.getElementById("nameUserUpdate").value,
+                surname: document.getElementById("surnameUserUpdate").value,
+                salary: parseInt(document.getElementById("salaryUpdate").value, 10),
+                phone: document.getElementById("phoneUpdate").value,
+                cname: document.getElementById("cnameUpdate").value
+            }
+    
+            const headers = new Headers();
+            headers.append("Content-Type", "application/json");
+    
+            const body = {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: headers,
+            }
+    
+            fetch("http:\/\/localhost:4000/users/update", body)
+        })
+    getUser.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/users\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>Email</th><th>Name</th><th>Surname</th><th>Salary</th><th>Phone</th><th>Cname</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.email}</td><td>${obj.name}</td><td>${obj.surname}</td><td>${obj.salary}</td><td>${obj.phone}</td><td>${obj.cname}</td><td><button class=delete onclick=DeleteUser(\"${obj.email}\")>delete</button></td><td><button class=update onclick=UpdateUser(\"${obj.email}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showUserCreate()>Add User</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+
+    function DeleteUser(user) {
+        fetch("http:\/\/localhost:4000\/users\/delete/" + user)
+    }
+
+    function UpdateUser(user) {
+        countryCreate.style.visibility = "hidden";
+        countryUpdate.style.visibility = "hidden";
+        userCreate.style.visibility = "hidden";
+        userUpdate.style.visibility = "visible";
+
+        fetch("http:\/\/localhost:4000\/users\/get/" + user)
+        .then((response) => response.json())
+        .then((data) => {
+            document.getElementById("emailUserUpdate").value  = data.data.email;
+            document.getElementById("nameUserUpdate").value= data.data.name;
+            document.getElementById("surnameUserUpdate").value = data.data.surname;
+            document.getElementById("salaryUpdate").value = data.data.salary;
+            document.getElementById("phoneUpdate").value = data.data.phone;
+            document.getElementById("cnameUpdate").value = data.data.cname;
+        })
+    }
+
+    function showUserCreate() {
+        countryCreate.style.visibility = "hidden";
+        countryUpdate.style.visibility = "hidden";
+        userCreate.style.visibility = "visible";
+        userUpdate.style.visibility = "hidden";
+    }
+
+    createCountry.addEventListener("click", function() {
+
+        const payload = {
+                cname: document.getElementById("cnameCountry").value,
+                population: parseInt(document.getElementById("populationCountry").value, 10)
+        }
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        const body = {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: headers,
+        }
+
+        fetch("http:\/\/localhost:4000/country/create", body)
+    })
+
+    updateCountry.addEventListener("click", function(){
+            
+            const payload = {
+                    cname: document.getElementById("cnameCountryUpdate").value,
+                    population: parseInt(document.getElementById("populationCountryUpdate").value, 10)
+            }
+    
+            const headers = new Headers();
+            headers.append("Content-Type", "application/json");
+    
+            const body = {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: headers,
+            }
+    
+            fetch("http:\/\/localhost:4000/country/update", body)
+        })
+    getCountry.addEventListener("click", function() {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        fetch("http:\/\/localhost:4000\/country\/getAll")
+        .then((response) => response.json())
+        .then((data) => {
+            var str = `<table><tbody><tr><th>Cname</th><th>Population</th><th>Delete</th></tr>`;
+            data.data.forEach(element => {
+                var obj = JSON.parse(JSON.stringify(element, undefined, 4));
+                str += `<tr><td>${obj.cname}</td><td>${obj.population}</td><td><button class=delete onclick=DeleteCountry(\"${obj.cname}\")>delete</button></td><td><button class=update onclick=UpdateCountry(\"${obj.cname}\")>update</button></td></tr>`;
+            });
+            str += `</tbody></table>`;
+            output.innerHTML = str;
+            output.innerHTML += `<button onclick=showCountryCreate()>Add Country</button>`;
+        })
+        .catch((error) => {
+            error.innerHTML += "<br><br>Error: " + error;
+        })        
+    })
+
+    function DeleteCountry(country) {
+        fetch("http:\/\/localhost:4000\/country\/delete/" + country)
+    }
+
+    function UpdateCountry(country) {
+        countryCreate.style.visibility = "hidden";
+        countryUpdate.style.visibility = "visible";
+        fetch("http:\/\/localhost:4000\/country\/get/" + country)
+        .then((response) => response.json())
+        .then((data) => {
+            cnameCountryUpdate.value = data.data.cname;
+            populationCountryUpdate.value = data.data.population;
+        })
+    }
+
+    function showCountryCreate() {
+        countryCreate.style.visibility = "visible";
+        countryUpdate.style.visibility = "hidden";
+    }
+
+    
+    </script>
+    
+{{end}}
