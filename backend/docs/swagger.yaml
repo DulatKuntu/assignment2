@@ -1,0 +1,666 @@
+basePath: /
+definitions:
+  model.Address:
+    properties:
+      house_number:
+        type: integer
+      member_user_id:
+        type: integer
+      street:
+        type: string
+      town:
+        type: string
+    type: object
+  model.Appointment:
+    properties:
+      appointment_date:
+        type: string
+      appointment_id:
+        type: integer
+      appointment_time:
+        type: string
+      caregiver_user_id:
+        type: integer
+      member_user_id:
+        type: integer
+      status:
+        type: string
+      work_hours:
+        type: integer
+    type: object
+  model.Caregiver:
+    properties:
+      caregiver_user_id:
+        type: integer
+      caregiving_type:
+        type: string
+      gender:
+        type: string
+      hourly_rate:
+        type: number
+      photo:
+        type: string
+    type: object
+  model.Job:
+    properties:
+      date_posted:
+        type: string
+      job_id:
+        type: integer
+      member_user_id:
+        type: integer
+      other_requirements:
+        type: string
+      required_caregiving_type:
+        type: string
+    type: object
+  model.JobApplication:
+    properties:
+      caregiver_user_id:
+        type: integer
+      date_applied:
+        type: string
+      job_id:
+        type: integer
+    type: object
+  model.Member:
+    properties:
+      house_rules:
+        type: string
+      member_user_id:
+        type: integer
+    type: object
+  model.User:
+    properties:
+      city:
+        type: string
+      email:
+        type: string
+      given_name:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      profile_description:
+        type: string
+      surname:
+        type: string
+      user_id:
+        type: integer
+    type: object
+host: localhost:4000
+info:
+  contact: {}
+  description: This is a DB assignment.
+  title: Database Assignment
+  version: "1"
+paths:
+  /addresses/create:
+    post:
+      description: Create a new address with the provided data
+      parameters:
+      - description: Address object
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/model.Address'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new address
+      tags:
+      - addresses
+  /addresses/delete/{id}:
+    get:
+      description: Delete an address based on the provided ID
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete an address
+      tags:
+      - addresses
+  /addresses/get/{id}:
+    get:
+      description: Get an address based on the provided ID
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Address'
+      summary: Get an address by ID
+      tags:
+      - addresses
+  /addresses/getAll:
+    get:
+      description: Get a list of all addresses
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Address'
+            type: array
+      summary: Get all addresses
+      tags:
+      - addresses
+  /addresses/update:
+    post:
+      description: Update an address with the provided data
+      parameters:
+      - description: Address object
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/model.Address'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update an address
+      tags:
+      - addresses
+  /appointments/create:
+    post:
+      description: Create a new appointment with the provided data
+      parameters:
+      - description: Appointment object
+        in: body
+        name: appointment
+        required: true
+        schema:
+          $ref: '#/definitions/model.Appointment'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new appointment
+      tags:
+      - appointments
+  /appointments/delete/{id}:
+    get:
+      description: Delete an appointment based on the provided ID
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete an appointment
+      tags:
+      - appointments
+  /appointments/get/{id}:
+    get:
+      description: Get an appointment based on the provided ID
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Appointment'
+      summary: Get an appointment by ID
+      tags:
+      - appointments
+  /appointments/getAll:
+    get:
+      description: Get a list of all appointments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Appointment'
+            type: array
+      summary: Get all appointments
+      tags:
+      - appointments
+  /appointments/update:
+    post:
+      description: Update an appointment with the provided data
+      parameters:
+      - description: Appointment object
+        in: body
+        name: appointment
+        required: true
+        schema:
+          $ref: '#/definitions/model.Appointment'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update an appointment
+      tags:
+      - appointments
+  /caregivers/create:
+    post:
+      description: Create a new caregiver with the provided data
+      parameters:
+      - description: Caregiver object
+        in: body
+        name: caregiver
+        required: true
+        schema:
+          $ref: '#/definitions/model.Caregiver'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new caregiver
+      tags:
+      - caregivers
+  /caregivers/delete/{id}:
+    get:
+      description: Delete a caregiver based on the provided ID
+      parameters:
+      - description: Caregiver ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a caregiver
+      tags:
+      - caregivers
+  /caregivers/get/{id}:
+    get:
+      description: Get a caregiver based on the provided ID
+      parameters:
+      - description: Caregiver ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Caregiver'
+      summary: Get a caregiver by ID
+      tags:
+      - caregivers
+  /caregivers/getAll:
+    get:
+      description: Get a list of all caregivers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Caregiver'
+            type: array
+      summary: Get all caregivers
+      tags:
+      - caregivers
+  /caregivers/update:
+    post:
+      description: Update a caregiver with the provided data
+      parameters:
+      - description: Caregiver object
+        in: body
+        name: caregiver
+        required: true
+        schema:
+          $ref: '#/definitions/model.Caregiver'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a caregiver
+      tags:
+      - caregivers
+  /jobApplications/create:
+    post:
+      description: Create a new job application with the provided data
+      parameters:
+      - description: Job Application object
+        in: body
+        name: jobApplication
+        required: true
+        schema:
+          $ref: '#/definitions/model.JobApplication'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new job application
+      tags:
+      - jobApplications
+  /jobApplications/delete/{id}:
+    get:
+      description: Delete a job application based on the provided ID
+      parameters:
+      - description: Job Application ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a job application
+      tags:
+      - jobApplications
+  /jobApplications/get/{id}:
+    get:
+      description: Get a job application based on the provided ID
+      parameters:
+      - description: Job Application ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.JobApplication'
+      summary: Get a job application by ID
+      tags:
+      - jobApplications
+  /jobApplications/getAll:
+    get:
+      description: Get a list of all job applications
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.JobApplication'
+            type: array
+      summary: Get all job applications
+      tags:
+      - jobApplications
+  /jobApplications/update:
+    post:
+      description: Update a job application with the provided data
+      parameters:
+      - description: Job Application object
+        in: body
+        name: jobApplication
+        required: true
+        schema:
+          $ref: '#/definitions/model.JobApplication'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a job application
+      tags:
+      - jobApplications
+  /jobs/create:
+    post:
+      description: Create a new job with the provided data
+      parameters:
+      - description: Job object
+        in: body
+        name: job
+        required: true
+        schema:
+          $ref: '#/definitions/model.Job'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new job
+      tags:
+      - jobs
+  /jobs/delete/{id}:
+    get:
+      description: Delete a job based on the provided ID
+      parameters:
+      - description: Job ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a job
+      tags:
+      - jobs
+  /jobs/get/{id}:
+    get:
+      description: Get a job based on the provided ID
+      parameters:
+      - description: Job ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Job'
+      summary: Get a job by ID
+      tags:
+      - jobs
+  /jobs/getAll:
+    get:
+      description: Get a list of all jobs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Job'
+            type: array
+      summary: Get all jobs
+      tags:
+      - jobs
+  /jobs/update:
+    post:
+      description: Update a job with the provided data
+      parameters:
+      - description: Job object
+        in: body
+        name: job
+        required: true
+        schema:
+          $ref: '#/definitions/model.Job'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a job
+      tags:
+      - jobs
+  /members/create:
+    post:
+      description: Create a new member with the provided data
+      parameters:
+      - description: Member object
+        in: body
+        name: member
+        required: true
+        schema:
+          $ref: '#/definitions/model.Member'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new member
+      tags:
+      - members
+  /members/delete/{id}:
+    get:
+      description: Delete a member based on the provided ID
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a member
+      tags:
+      - members
+  /members/get/{id}:
+    get:
+      description: Get a member based on the provided ID
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Member'
+      summary: Get a member by ID
+      tags:
+      - members
+  /members/getAll:
+    get:
+      description: Get a list of all members
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Member'
+            type: array
+      summary: Get all members
+      tags:
+      - members
+  /members/update:
+    post:
+      description: Update a member with the provided data
+      parameters:
+      - description: Member object
+        in: body
+        name: member
+        required: true
+        schema:
+          $ref: '#/definitions/model.Member'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a member
+      tags:
+      - members
+  /users/create:
+    post:
+      description: Create a new user with the provided data
+      parameters:
+      - description: User object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new user
+      tags:
+      - users
+  /users/delete/{id}:
+    get:
+      description: Delete a user based on the provided ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a user
+      tags:
+      - users
+  /users/get/{id}:
+    get:
+      description: Get a user based on the provided ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: Get a user by ID
+      tags:
+      - users
+  /users/getAll:
+    get:
+      description: Get a list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+      summary: Get all users
+      tags:
+      - users
+  /users/update:
+    post:
+      description: Update a user with the provided data
+      parameters:
+      - description: User object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a user
+      tags:
+      - users
+swagger: "2.0"

@@ -1,9 +1,12 @@
 package handler
 
 import (
+	_ "bonus/docs"
 	"bonus/pkg/repository"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 type Handler struct {
@@ -16,77 +19,63 @@ func NewHandler(repo *repository.Repository) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-	country := router.Group("/country")
-	{
-		country.GET("/getAll", h.getAllCountries)
-		country.GET("/get/:cname", h.getCountry)
-		country.POST("/create", h.createCountry)
-		country.POST("/update", h.updateCountry)
-		country.GET("/delete/:cname", h.deleteCountry)
-	}
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	users := router.Group("/users")
 	{
 		users.GET("/getAll", h.getAllUsers)
-		users.GET("/get/:email", h.getUser)
+		users.GET("/get/:id", h.getUser)
 		users.POST("/create", h.createUser)
 		users.POST("/update", h.updateUser)
-		users.GET("/delete/:email", h.deleteUser)
+		users.GET("/delete/:id", h.deleteUser)
 	}
-	disease := router.Group("/disease")
+	caregivers := router.Group("/caregivers")
 	{
-		disease.GET("/getAll", h.getAllDiseases)
-		disease.GET("/get/:disease_code", h.getDisease)
-		disease.POST("/create", h.createDisease)
-		disease.POST("/update", h.updateDisease)
-		disease.POST("/delete", h.deleteDisease)
+		caregivers.GET("/getAll", h.getAllCaregivers)
+		caregivers.GET("/get/:id", h.getCaregivers)
+		caregivers.POST("/create", h.createCaregivers)
+		caregivers.POST("/update", h.updateCaregivers)
+		caregivers.GET("/delete/:id", h.deleteCaregivers)
 	}
-	diseaseType := router.Group("/diseaseType")
+	members := router.Group("/members")
 	{
-		diseaseType.GET("/getAll", h.getAllDiseaseTypes)
-		diseaseType.GET("/get/:id", h.getDiseaseType)
-		diseaseType.POST("/create", h.createDiseaseType)
-		diseaseType.POST("/update", h.updateDiseaseType)
-		diseaseType.POST("/delete", h.deleteDiseaseType)
+		members.GET("/getAll", h.getAllMembers)
+		members.GET("/get/:id", h.getMembers)
+		members.POST("/create", h.createMembers)
+		members.POST("/update", h.updateMembers)
+		members.GET("/delete/:id", h.deleteMembers)
 	}
-	discover := router.Group("/discover")
+	addresses := router.Group("/addresses")
 	{
-		discover.GET("/getAll", h.getAllDiscovers)
-		discover.GET("/get/:cname/:disease_code", h.getDiscover)
-		discover.POST("/create", h.createDiscover)
-		discover.POST("/update", h.updateDiscover)
-		discover.POST("/delete", h.deleteDiscover)
+		addresses.GET("/getAll", h.getAllAddresses)
+		addresses.GET("/get/:id", h.getAddresses)
+		addresses.POST("/create", h.createAddresses)
+		addresses.POST("/update", h.updateAddresses)
+		addresses.GET("/delete/:id", h.deleteAddresses)
 	}
-	doctor := router.Group("/doctor")
+	jobs := router.Group("/jobs")
 	{
-		doctor.GET("/getAll", h.getAllDoctors)
-		doctor.GET("/get/:email", h.getDoctor)
-		doctor.POST("/create", h.createDoctor)
-		doctor.POST("/update", h.updateDoctor)
-		doctor.POST("/delete", h.deleteDoctor)
+		jobs.GET("/getAll", h.getAllJobs)
+		jobs.GET("/get/:id", h.getJobs)
+		jobs.POST("/create", h.createJobs)
+		jobs.POST("/update", h.updateJobs)
+		jobs.GET("/delete/:id", h.deleteJobs)
 	}
-	publicServant := router.Group("/publicServant")
+	jobApplications := router.Group("/job_applications")
 	{
-		publicServant.GET("/getAll", h.getAllPublicServants)
-		publicServant.GET("/get/:email", h.getPublicServant)
-		publicServant.POST("/create", h.createPublicServant)
-		publicServant.POST("/update", h.updatePublicServant)
-		publicServant.POST("/delete", h.deletePublicServant)
+		jobApplications.GET("/getAll", h.getAllJobApplications)
+		jobApplications.GET("/get/:id", h.getJobApplications)
+		jobApplications.POST("/create", h.createJobApplications)
+		jobApplications.POST("/update", h.updateJobApplications)
+		jobApplications.GET("/delete/:id", h.deleteJobApplications)
 	}
-	specialize := router.Group("/specialize")
+	appointments := router.Group("/appointments")
 	{
-		specialize.GET("/getAll", h.getAllSpecializes)
-		specialize.GET("/get/:id/:email", h.getSpecialize)
-		specialize.POST("/create", h.createSpecialize)
-		specialize.POST("/update", h.updateSpecialize)
-		specialize.POST("/delete", h.deleteSpecialize)
-	}
-	record := router.Group("/record")
-	{
-		record.GET("/getAll", h.getAllRecords)
-		record.GET("/get/:email/:cname/:diseaseCode", h.getRecord)
-		record.POST("/create", h.createRecord)
-		record.POST("/update", h.updateRecord)
-		record.POST("/delete", h.deleteRecord)
+		appointments.GET("/getAll", h.getAllAppointments)
+		appointments.GET("/get/:id", h.getAppointments)
+		appointments.POST("/create", h.createAppointments)
+		appointments.POST("/update", h.updateAppointments)
+		appointments.GET("/delete/:id", h.deleteAppointments)
 	}
 
 	return router
