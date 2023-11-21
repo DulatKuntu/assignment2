@@ -89,7 +89,7 @@ definitions:
       user_id:
         type: integer
     type: object
-host: localhost:4000
+host: http://174.129.87.192:4000
 info:
   contact: {}
   description: This is a DB assignment.

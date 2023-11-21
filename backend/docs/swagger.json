@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1"
     },
-    "host": "localhost:4000",
+    "host": "http://174.129.87.192:4000",
     "basePath": "/",
     "paths": {
         "/addresses/create": {

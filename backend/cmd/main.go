@@ -21,7 +21,7 @@ func init() {
 // @title Database Assignment
 // @version 1
 // @description This is a DB assignment.
-// @host localhost:4000
+// @host http://174.129.87.192:4000
 // @BasePath /
 func main() {
 	logrus.Print("Startup server")
